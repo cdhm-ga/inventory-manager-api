@@ -78,4 +78,21 @@ router.patch('/storefront-items/:id', requireToken, removeBlanks, (req, res, nex
     .catch(next)
 })
 
+// DESTROY
+// DELETE /examples/5a7db6c74d55bc51bdf39793
+router.delete('/storefront-items/:id', requireToken, (req, res, next) => {
+  StorefrontItem.findById(req.params.id)
+    .then(handle404)
+    .then(storefrontItem => {
+      // throw an error if current user doesn't own `storefrontItem`
+      requireOwnership(req, storefrontItem)
+      // delete the storefrontItem ONLY IF the above didn't throw
+      storefrontItem.remove()
+    })
+    // send back 204 and no content if the deletion succeeded
+    .then(() => res.sendStatus(204))
+    // if an error occurs, pass it to the handler
+    .catch(next)
+})
+
 module.exports = router
