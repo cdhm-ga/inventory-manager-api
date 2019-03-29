@@ -4,7 +4,7 @@ const mongoose = require('mongoose')
 const warehouseItemSchema = new mongoose.Schema({
   name: {
     type: String,
-    requried: true
+    required: true
   },
   price: {
     // cents
@@ -12,6 +12,9 @@ const warehouseItemSchema = new mongoose.Schema({
     required: true,
     min: 0
   }
+},
+{
+  collection: 'warehouseItems'
 })
 /* ~~~~~~~~~~~~~~Inventory Model Ends Here ~~~~~~~~~~~~~~~~~~~~ */
 
