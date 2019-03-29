@@ -30,10 +30,8 @@ const router = express.Router()
 // INDEX
 // GET /storefront-items
 router.get('/storefront-items', requireToken, (req, res, next) => {
-  StorefrontItem.find()
-    .then(items => {
-      return items.filter(item => req.user._id.equals(item.owner))
-    })
+  StorefrontItem.find({ owner: req.user._id }).populate('warehouseItem')
+    .then(items => items.map(item => item.toObject()))
     .then(items => res.status(200).json({ items: items }))
     .catch(next)
 })
