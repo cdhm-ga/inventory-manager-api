@@ -2,4 +2,4 @@
 
 # bulk load data
 
-mongoimport --db=mongo-crud --collection=books --type=csv --headerline --file=data/books.csv
+mongoimport --db=inventory-manager-api-development --collection=warehouseItems --type=csv --headerline --file=lib/seeds.csv
