@@ -4,7 +4,8 @@ const storefrontItemSchema = new mongoose.Schema({
   warehouseItem: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'WarehouseItem',
-    requried: true
+    required: true,
+    unique: true
   },
   owner: {
     type: mongoose.Schema.Types.ObjectId,

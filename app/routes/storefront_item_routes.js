@@ -41,8 +41,27 @@ router.get('/storefront-items', requireToken, (req, res, next) => {
 router.post('/storefront-items', requireToken, (req, res, next) => {
   // set owner of new item to be current user
   req.body.storefrontItem.owner = req.user.id
-
-  StorefrontItem.create(req.body.storefrontItem)
+  // search collection for existing doc. If none exists, create new doc.
+  // If doc exists, update existing doc and return updated doc as json object.
+  StorefrontItem.findOneAndUpdate(
+    // first arg: filter
+    // search from doc that contains same warehouseItem ID as req object
+    { 'warehouseItem': req.body.storefrontItem.warehouseItem },
+    // second arg: update
+    // if doc found, update/overwrite doc quantity with req.body quantity
+    { $set: { 'quantity': req.body.storefrontItem.quantity,
+      'warehouseItem': req.body.storefrontItem.warehouseItem,
+      'owner': req.body.storefrontItem.owner
+    }
+    },
+    // third arg: sets method behaviors
+    {
+      // creates new doc if no docs match filter
+      upsert: true,
+      // returns updated doc in response instead of original doc
+      new: true
+    }
+  )
     // respond to succesful `create` with status 201 and JSON of new "storefront_item"
     .then(item => {
       res.status(201).json({ storefrontItem: item.toObject() })
@@ -51,6 +70,7 @@ router.post('/storefront-items', requireToken, (req, res, next) => {
     // the error handler needs the error message and the `res` object so that it
     // can send an error message back to the client
     .catch(next)
+  // }
 })
 
 // UPDATE
