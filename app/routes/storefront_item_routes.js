@@ -70,7 +70,6 @@ router.post('/storefront-items', requireToken, (req, res, next) => {
     // the error handler needs the error message and the `res` object so that it
     // can send an error message back to the client
     .catch(next)
-  // }
 })
 
 // UPDATE
